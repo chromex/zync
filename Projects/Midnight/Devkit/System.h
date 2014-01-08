@@ -90,12 +90,28 @@ public:
 		glfwTerminate();
 	}
 
-	void GetScreenSize(int* width, int* height)
+	void GetScreenSize(int* width, int* height) const
 	{
-		debug.Assert(width != NULL, "Width must not be null");
-		debug.Assert(height != NULL, "Height must not be null");
-
 		glfwGetFramebufferSize(_window, width, height);
+	}
+
+	int GetWidth() const
+	{
+		int width;
+		GetScreenSize(&width, 0);
+		return width / graphics.GetPixelSize();
+	}
+
+	int GetHeight() const
+	{
+		int height;
+		GetScreenSize(0, &height);
+		return height / graphics.GetPixelSize();
+	}
+
+	float GetTime() const
+	{
+		return (float) glfwGetTime();
 	}
 
 private:

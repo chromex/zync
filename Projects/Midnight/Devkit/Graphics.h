@@ -18,6 +18,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+enum Anchor
+{
+	E_BOTTOMLEFT,
+	E_LEFT,
+	E_TOPLEFT,
+	E_BOTTOM,
+	E_CENTER,
+	E_TOP,
+	E_BOTTOMRIGHT,
+	E_RIGHT,
+	E_TOPRIGHT,
+	NumAnchors
+};
+
 struct DrawOperation;
 struct Texture;
 
@@ -39,6 +53,11 @@ public:
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+	}
+
+	int GetPixelSize() const
+	{
+		return _pixelSize;
 	}
 
 	void CleanUp()
@@ -63,7 +82,7 @@ public:
 		return this->LoadTexture(textureName);
 	}
 
-	void Draw(Texture* texture, float x, float y)
+	void Draw(Texture* texture, float x, float y, Anchor anchor = E_BOTTOMLEFT, float angle = 0.f)
 	{
 		debug.Assert(texture != NULL, "Null texture cannot be used for Draw");
 
@@ -77,6 +96,8 @@ public:
 		op.texture = texture;
 		op.position.x = x;
 		op.position.y = y;
+		op.anchor = anchor;
+		op.angle = angle;
 	}
 
 	void Render()
@@ -99,28 +120,47 @@ public:
 		{
 			DrawOperation& op = _drawOperations[index];
 
-			glPushMatrix();
-			glTranslatef(60.f, 60.f, 0.0f);
-			// glRotatef((float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f);
-			glTranslatef(-60.f, -60.f, 0.0f);
-
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, op.texture->id);
-
 			float x = op.position.x;
 			float y = op.position.y;
 			float w = op.texture->width;
 			float h = op.texture->height;
+			float hw = w * 0.5f;
+			float hh = h * 0.5f;
+
+			glPushMatrix();
+
+			// Position
+			glTranslatef(x, y, 0.f);
+
+			// Rotation
+			glRotatef(op.angle, 0.f, 0.f, 1.f);
+
+			// Anchor translation
+			switch(op.anchor)
+			{
+				case E_LEFT:        glTranslatef(0.f, -hh, 0.f); break;
+				case E_TOPLEFT:     glTranslatef(0.f,  -h, 0.f); break;
+				case E_BOTTOM:      glTranslatef(-hw, 0.f, 0.f); break;
+				case E_CENTER:      glTranslatef(-hw, -hh, 0.f); break;
+				case E_TOP:         glTranslatef(-hw,  -h, 0.f); break;
+				case E_BOTTOMRIGHT: glTranslatef( -w, 0.f, 0.f); break;
+				case E_RIGHT:       glTranslatef( -w, -hh, 0.f); break;
+				case E_TOPRIGHT:    glTranslatef( -w,  -h, 0.f); break;
+				default: break;
+			}
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, op.texture->id);
 
 			glBegin(GL_QUADS);
 				glTexCoord2f(0, 0);
-				glVertex3f(x, y, 0.f);
+				glVertex3f(0.f, 0.f, 0.f);
 				glTexCoord2f(0, 1);
-				glVertex3f(x, y + h, 0.f);
+				glVertex3f(0.f, h, 0.f);
 				glTexCoord2f(1, 1);
-				glVertex3f(x + w, y + h, 0.f);
+				glVertex3f(w, h, 0.f);
 				glTexCoord2f(1, 0);
-				glVertex3f(x + w, y, 0.f);
+				glVertex3f(w, 0.f, 0.f);
 			glEnd();
 
 			glPopMatrix();
@@ -219,6 +259,8 @@ struct DrawOperation
 {
 	Texture* texture;
 	Vec2 position;
+	Anchor anchor;
+	float angle;
 
 	DrawOperation()
 		: texture(NULL)
@@ -228,5 +270,7 @@ struct DrawOperation
 	{
 		texture = NULL;
 		position.Set(0.f, 0.f);
+		anchor = E_BOTTOMLEFT;
+		angle = 0.f;
 	}
 };

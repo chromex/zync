@@ -24,7 +24,7 @@ zync::System zync::system;
 
 int main(void)
 {
-	zync::system.Setup(640, 480, 3, "Midnight");
+	zync::system.Setup(640, 480, 4, "Midnight");
 	zync::system.Run(new zync::Level);
 	zync::graphics.CleanUp();
 }

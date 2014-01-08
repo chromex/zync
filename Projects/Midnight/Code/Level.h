@@ -1,7 +1,6 @@
 // Story
-// * Load textures in ctor
-// * Textures owned by graphics
-// * Queue up draw
+// * Add draw scale
+// * Add player input callbacks OR use state queries
 
 class Level : public Scene
 {
@@ -14,11 +13,12 @@ public:
 
 	virtual void Update()
 	{
-		graphics.Draw(_texture, 50, 50);
-		graphics.Draw(_texture, 175, 100);
+		float x = system.GetWidth() / 2.f;
+		float y = system.GetHeight() / 2.f;
 
-		// anchor options for the draw call
-		// rotation
+		graphics.Draw(_texture, x + 50 * sin(system.GetTime()), y, E_CENTER, system.GetTime() * 150.f);
+		graphics.Draw(_texture, x, y + 25 * sin(system.GetTime()), E_BOTTOM, system.GetTime() * -120.f);
+
 		// scale
 	}
 

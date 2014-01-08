@@ -1,0 +1,9 @@
+Script to create a new project
+	Copy paste a command from your browser into a prompt and boom, everything you could ever need is downloaded
+
+Draw
+	Rotation
+	Scale
+	Color
+
+Interfaces for user interactive global system objects

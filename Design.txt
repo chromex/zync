@@ -1,0 +1,63 @@
+Goal: develop a gamejam oriented C++ game engine and development environment
+
+Project Creation Story:
+	1. Download a zync zip and unzip
+	2. Run the setup to build the tools (asset compilation tool)
+	3. Run the create project script which creates a new folder containing copies of the libs (easier to share)
+	4. GO
+
+Build:
+	Build out of directory
+	Support for VS, Eclipse, make, etc.
+	Build command for generating a downloadable package
+	Script for embedding assets into a .h
+	Static linking so that a single executable can be installed
+	Texture atlas generation (?)
+
+	Build looks at the list of files in the Code directory and lists all .cpp into the build include
+
+Systems:
+	Window management with GLFW
+	Input using lambda callbacks (?)
+	Audio using OpenAL (?)
+	Flixel like rendering: order performed is order drawn (?) -- optional layer support (?)
+	Monolithic gameobject
+	Headerless
+	Box2D physics
+	Tile map renderer
+	Truetype font rendering from embedded ttf
+
+Performance:
+	Should support a decent game at 30FPS on a raspberry pi
+
+Graphics:
+	Pixel perfect
+	Pixel stylized
+
+Development Plan:
+	Goal is use for GGJ 2015
+
+	Milestone 1:
+		Scalable graphics screen
+		Animations
+		Input
+		Simple objects
+
+		Verification is characters walking around on screen with a player character driven by input
+	
+	Milestone 2:
+		Audio
+		Physics with Box2D
+		Tiled map
+
+		Verification is a randomly generated tile map with shooting of the randos
+
+	Milestone 3:
+		Text + dev console
+		Polish build process with CMake
+
+		Verification is a complete survival mini-game
+
+Unassigned tasks:
+	Custom shaders
+	UI helpers? Real mode UI? Callback based UI? 
